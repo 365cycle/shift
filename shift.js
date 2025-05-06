@@ -239,23 +239,33 @@
 //				add tab for ASCII display. add shiftASCII.js to contain functions
 // ----------shift6.0 ---------------------------------------------
 // 04/11/2019	duplicated 5.2.1 to attempt to attempt to move it off earthlink
+//				and on to github
+// 05/09/2019	update cassettes on index.html (shift.html) and shiftCassettes.html
+// 05/10/2019	(v6.03) browser detectection - Not working - change tab-pane sizes
+//				make combined cassette-crank tab handle 12 cogs
+// 05/11/2019	more cassettes
+//				fix cookies - save / swap
+// 05/20/2019	(v6.04) more cassettes
+//				reverse order of cassettes on pull down = 13 at top
+//				start to standardize the names
+// 05/21/2019	(v6.05) fix URL code
+// 05/23/2019	(v6.06) automatically set a page title when the cassette is changed
 //
 //
 //  TODO
+//  when loading from URL, select the correct cassette
+//  sort the cassette list
 //	highlight chainring
-//  turn highlighting off on touch screens
+//  turn highlighting off on touch screens?
 //	generic function for number tables
 //
 // ------------------------------------------------------------------
 // ------------------------------------------------------------------
 // bugs:
-//  cookies 
 //  display differences between browsers in html spacing
 //  hightlight ring is not implemented in the display code
 //
-// - David Roberts <david@robertsbrown.com> - my calculations of rollout to yours and I 
-//   noticed that my calculation was 1.06 times your in metres and 0.99 when  expressed 
-//   in inches.  I used 39.37 inches/m as the conversion.
+
 // - clean up updateOutput() vs in cookies
 // - bug? - lines in all tables is reverse order between graphical and ascii versions 
 //   on all tables - added switching in Gear Inch Table 4.4.3 2/2012
@@ -269,7 +279,6 @@
 // - BUG - configuration is lost when going to the about page and back
 // - add display order to bookmarks and URL and screen update
 // - add help on speed over rpm range - see email
-// - what is wheel # 24?
 // - some tooltips would be good
 // - sliders for sprocket values
 //   http://sixrevisions.com/tutorials/javascript_tutorial/create_lightweight_javascript_tooltip/
@@ -284,15 +293,13 @@
 // RFC:
 // - print all charts and graphs - Kevin Butt <kdbutt@gmail.com>
 // - internal hub gears
-// - add 27.5 MTB tires (650B) - Orlin Howell <orlinthecyclist@gmail.com>
-// - add 650B Mountain Bike wheels with MTB tires - Mariusz Golinski <mtbnews@mtbnews.pl>
 // - add option to show/don't show bad chainline gears - <jens.holmstrup@gmail.com>
 // - add graphical gain ratio display - <jens.holmstrup@gmail.com>
 // - add option to sort all 3 chainrings - Charles Bouldin <charlesbouldin@verizon.net>
 // - add 4 chain ring support - 24-26-48-60 chain rings (actually, 12-18-24-30 with a 1:2 drive
 //   train ration) - Rick Tompkins <rick@tigglesworth.com> 
-//   This requires rewrite of ALL table drawing functions, the rest is easy.
-//   This may also require larger space allotment on the screen for each table.  
+//    This requires rewrite of ALL table drawing functions, the rest is easy.
+//    This may also require larger space allotment on the screen for each table.  
 //    May be a problem.
 //   Perhaps I could find a better way to allocate screen space.
 // - internal hub gears : http://john-s-allen.com/gears/hubratios.htm
@@ -312,6 +319,8 @@
 //   could read window width from browser and scale from that.
 //
 
+var browserType = "??";
+
 var debugString = "Debug area";
 // array of cogs we are using
 cogs = new Array();
@@ -324,7 +333,9 @@ var p1 = 81;
 var p2 = 80;
 var w2 = 800;
 
-var pageTitle = "";
+var pageTitle = "Campagnolo 10-speed  12-25";
+var proposedTitle = "";
+var lastTitle = "Campagnolo 10-speed  12-25";
 
 var cookieString;
 var defaultCookie="101XxX4XxX10XxX170XxX10XxX8XxX8XxX2XxX46XxX50XxX999XxX14XxX16XxX18XxX20XxX22XxX999XxX999XxX999XxX999XxX999XxX999XxXCoppiXxX90XxX0XxX80XxX90XxXshowXxXnoXxX"
@@ -332,12 +343,15 @@ var defaultCookie="101XxX4XxX10XxX170XxX10XxX8XxX8XxX2XxX46XxX50XxX999XxX14XxX16
 // default values
 var cassetteSelection = 101;   	// campy 12-25 10 speed
 //var cassetteOption;			 	// index of selected cassette
+var cassetteName = "Campagnolo 10-speed  12-25";			// added 05/21/2019
+//var lastCassetteName = "";
 var numCogs = 10;              	// 10 speed
 var crank = 170;               	// default crank length
 var crankOption;			 	// index of selected crank
 var wheelIndex = 1;            	// defalut wheel size 
 var wheelOption;               	// which wheel option
 var tireOption;					// tire size (rev 5)
+var deflectOption;				// tire deflection
 var rolloutType = 1;           	// 0=english, 1=metric
 var speedType = 0;             	// 0=mph, 1=kph
 var RPM = 90;                  	// crank speed
@@ -421,6 +435,8 @@ function initGears()
 		} 
 	}
 	url = "file:///home/mike/Dropbox/www/shift/shift5.0/shift.html";
+
+	BrowserDetection();
 }
 
 function detectMobile()
@@ -466,6 +482,8 @@ function updateOutput()
 	tireWidth = tWidth[tireIndex];					// width of selected tire
 	tireRadius = (beadSeat/2)+tireWidth-deflection;	// wheel radius in mm
 	tireDiameter = (tireRadius*2)/25.4;				// wheel diameter in Inches
+
+	//pageTitle = cassetteName;						// added 05/21/2019
 	
 	// base functions
    	writeRings();
@@ -492,7 +510,7 @@ function updateOutput()
 	speedTable();
 	sheldonRatios();
 	
-
+	updateBrowser();
 	//debug
 //	showDebug();
 
@@ -554,6 +572,8 @@ function calcGears()
 		Plspeed[i] = Math.round(lspeed[i] * 10) / 10;
 		Phspeed[i] = Math.round(hspeed[i] * 10) / 10;
 	}
+
+	BrowserDetection();
 }
 
 function RPMrangeCheck()
@@ -659,10 +679,10 @@ function processArgs()		// read arguments attched to our URL
 					case "C10":
 						cogs[10] = parseInt(val);
 						break;
-					case "C10":
+					case "C11":
 						cogs[11] = parseInt(val);
 						break;
-					case "C10":
+					case "C12":
 						cogs[12] = parseInt(val);
 						break;
 
@@ -671,6 +691,9 @@ function processArgs()		// read arguments attched to our URL
 						break;
 					case "WI":		// index into wheel size table
 						wheelIndex = parseInt(val);
+						break;
+					case "TI":		// index into tire size table
+						tireIndex = parseInt(val);
 						break;
 					case "CR":		// crank length
 						crank = parseInt(val);
@@ -717,3 +740,79 @@ function processArgs()		// read arguments attched to our URL
 	}
 }
 
+function BrowserDetection() {
+	// Opera 8.0+
+	var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+
+	// Firefox 1.0+
+	var isFirefox = typeof InstallTrigger !== 'undefined';
+
+	// Safari 3.0+ "[object HTMLElementConstructor]" 
+	var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
+
+	// Internet Explorer 6-11
+	var isIE = /*@cc_on!@*/false || !!document.documentMode;
+
+	// Edge 20+
+	var isEdge = !isIE && !!window.StyleMedia;
+
+	// Chrome 1 - 71
+	var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+
+	// Blink engine detection
+	var isBlink = (isChrome || isOpera) && !!window.CSS;
+
+
+	//Check if browser is IE
+	if (isIE == true) {
+		browserType = "IE";
+	}
+	//Check if browser is Chrome
+	else if (isChrome == true) {
+		browserType = "CR";
+	}
+	//Check if browser is Firefox 
+	else if (isFirefox == true) {
+		browserType = "FF";
+	}
+	//Check if browser is Safari
+	else if (isSafari == true) {
+		browserType = "SF";
+	}
+	//Check if browser is Opera
+	else if (isOpera == true) {
+		browserType = "OP";
+	}
+	else {
+		browserType = "TBD";
+	}
+
+//    //Check if browser is IE
+//    if (navigator.userAgent.search("MSIE") & gt; = 0) {
+//        browserType = "IE";
+//    }
+//    //Check if browser is Chrome
+//    else if (navigator.userAgent.search("Chrome") & gt; = 0) {
+//        browserType = "CR";
+//    }
+//    //Check if browser is Firefox 
+//    else if (navigator.userAgent.search("Firefox") & gt; = 0) {
+//        browserType = "FF";
+//    }
+//    //Check if browser is Safari
+//    else if (navigator.userAgent.search("Safari") & gt; = 0 & amp; & amp; navigator.userAgent.search("Chrome") & lt; 0) {
+//        browserType = "SF";
+//    }
+//    //Check if browser is Opera
+//    else if (navigator.userAgent.search("Opera") & gt; = 0) {
+//        browserType = "OP";
+//    }
+}
+
+// set the title if the user changes the cassette
+function setTitle () {
+	//if (pageTitle == lastTitle) { // the title has not been changed by the user
+		pageTitle = proposedTitle;
+		lastTitle = pageTitle;
+	//}
+}

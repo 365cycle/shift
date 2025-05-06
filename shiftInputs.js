@@ -174,6 +174,21 @@ function cogPlus ( whichCog )
       cogs[10]++;
     }
     break;
+  case "cogx11":
+    if (cogs[11] == 999  ){
+      cogs[11]=parseInt(cogs[10])+1;
+    }else{
+      cogs[11]++;
+    }
+    break;
+  case "cogx12":
+    if (cogs[12] == 999  ){
+      cogs[12]=parseInt(cogs[11])+1;
+    }else{
+      cogs[12]++;
+    }
+    break;
+
   default:
     break;
   }
@@ -184,6 +199,8 @@ function cogPlus ( whichCog )
 		}
    }
    cassetteSelection = 0;	// changed something, not a stock cassette
+   proposedTitle = "Custom";
+   setTitle();
    updateOutput();
 }
 
@@ -313,6 +330,16 @@ function cogMinus ( whichCog )
       cogs[10]--;
     }
     break;
+  case "cogx11":
+    if (cogs[11] > 0 && cogs[11] < 999){
+      cogs[11]--;
+    }
+    break;
+  case "cogx12":
+    if (cogs[12] > 0 && cogs[12] < 999){
+      cogs[12]--;
+    }
+    break;
 
    default:
       break;
@@ -324,6 +351,8 @@ function cogMinus ( whichCog )
 		}
    }
    cassetteSelection = 0;	// changed something, not a stock cassette
+   proposedTitle = "Custom";
+   setTitle();
    updateOutput();
 }
 
@@ -405,12 +434,20 @@ function cogX ( whichCog )
   case "cogx10":
     cogs[10]=999;
     break;
+  case "cogx11":
+    cogs[11]=999;
+    break;
+  case "cogx12":
+    cogs[12]=999;
+    break;
 
 
    default:
       break;
    }
    cassetteSelection = 0;	// changed something, not a stock cassette
+   proposedTitle = "Custom";
+   setTitle();
    updateOutput();
 }
 

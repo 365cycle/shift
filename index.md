@@ -177,10 +177,7 @@ tp1 = new WebFXTabPane( document.getElementById( "tabPane1" ) );
 	    	</TD>
 	  	<TD ALIGN=CENTER><INPUT TYPE=text NAME="cog12" SIZE=2 VALUE=999 onchange="readCogs()"
 				onmouseover="gearHighlight('12')" onmouseout="gearHighlight('99')">
-				</TD>
-			<TD ALIGN=CENTER>
-				<INPUT TYPE="button" VALUE="Save"  onClick="saveSet()">
-			</TD>
+	    	</TD>
 		</TR>
 	<TR>
 	  	<TD ALIGN=CENTER COLSPAN=1>
@@ -286,10 +283,6 @@ tp1 = new WebFXTabPane( document.getElementById( "tabPane1" ) );
 	   		<INPUT TYPE="button" VALUE="  X  "  onClick="cogX('cog12')" 
 				onmouseover="gearHighlight('12')" onmouseout="gearHighlight		('99')">
 		</TD>
-		<TD ALIGN=CENTER>
-			<INPUT TYPE="button" VALUE="Recall"  onClick="readSet()"><br>
-			<INPUT TYPE="button" VALUE="Swap"  onClick="swapSet()">
-	 </TD>
 	</TR>
 		<!-- end of 2nd row  begining of 3rd row -->
 	<TR>
@@ -604,7 +597,7 @@ tp1 = new WebFXTabPane( document.getElementById( "tabPane1" ) );
 						<OPTION value="133">IRD 5-speed Freewheel 14-28</OPTION>
 						<OPTION value="1">My touring bike 5-speed 13-30</OPTION>
 	    	</SELECT>
-			</TD>
+	  	</TD>
 	</TR>
 </TABLE>
 </div>
@@ -918,9 +911,6 @@ tp1 = new WebFXTabPane( document.getElementById( "tabPane1" ) );
 		  	<TD ALIGN=CENTER><INPUT TYPE=text NAME="ringx2" SIZE=2 VALUE=46 
 				onchange="readxRings()">
 			</TD>
-			<TD ALIGN=CENTER>
-				<INPUT TYPE="button" VALUE="Save"  onClick="saveSet()">
-		 </TD>
 		</TR>
 		<!--- second row	-->	
 		<TR>
@@ -1038,10 +1028,6 @@ tp1 = new WebFXTabPane( document.getElementById( "tabPane1" ) );
 					onmouseover="ringHighlight('2')" onmouseout="ringHighlight('99')"><br>
 				<INPUT TYPE="button" VALUE="  X  "  onClick="ringX('ringx2')"
 					onmouseover="ringHighlight('2')" onmouseout="ringHighlight('99')"></TD>
-			<TD ALIGN=CENTER>
-				<INPUT TYPE="button" VALUE="Recall"  onClick="readSet()"><br>
-				<INPUT TYPE="button" VALUE="Swap"  onClick="swapSet()">
-			</TD>
 		</TR>
 		<!-- third row -->
 		<TR>
@@ -1553,7 +1539,7 @@ tp1 = new WebFXTabPane( document.getElementById( "tabPane1" ) );
 		<h2 class="tab">About</h2>
 		<b>Mike Sherman's Bicycle Gear Calculator</b>
 		<p>
-		Revision 6.06
+		Revision 6.04
 		<p>
 		Note: if you display isn't wide enough, there could be problems displaying
 		the  and  & rings input tabs, and with selecting display tabs.
@@ -1577,7 +1563,7 @@ tp1 = new WebFXTabPane( document.getElementById( "tabPane1" ) );
 		<p>
 		Here's <a href="shift_credits.html">some more</a> about the program and its history.
 		<p>
-			index.HTML
+			index.md
 			<br>
 			Browser = <INPUT TYPE=text NAME="browser" SIZE=2 style="border: none" readonly>
 		</p>

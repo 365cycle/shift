@@ -29,11 +29,11 @@ function writexCassette() // write cassette selection to screen - is this used
 {
 	//document.mainForm.cassette.options[cassetteOption].selected = true;
 	// set the correct item in the pull down menu
-	for ( var i = 0; i < document.mainForm.xcassette.options.length; i++ ) 
+	for ( var i = 0; i < document.mainForm.cassettex.options.length; i++ ) 
 	{
-		if ( document.mainForm.xcassette.options[i].value == cassettexSelection ) 
+		if ( document.mainForm.cassettex.options[i].value == cassetteSelection ) 
 		{
-			document.mainForm.xcassette.options[i].selected = true;
+			document.mainForm.cassettex.options[i].selected = true;
 		     break;
 		}
 	}
@@ -243,6 +243,16 @@ function writexCogs()	// update the cog display
    }else{
       document.mainForm.cogx10.value="";
    }
+   if (cogs[11] < 999){
+      document.mainForm.cogx11.value=cogs[11];
+   }else{
+      document.mainForm.cogx11.value="";
+   }
+   if (cogs[12] < 999){
+      document.mainForm.cogx12.value=cogs[12];
+   }else{
+      document.mainForm.cogx12.value="";
+   }
 
 	// set the correct item in the pull down menu
 	for ( var i = 0; i < document.mainForm.cassettex.options.length; i++ ) 
@@ -439,7 +449,10 @@ function writeURL()
 {
    createBookMarkString();
    // not allowed in current browsers
-   //document.mainForm.pageURL.value = url;
+   document.mainForm.pageURL.value = url;
 }
 
-
+function updateBrowser()
+{
+   document.mainForm.browser.value = browserType;
+}
