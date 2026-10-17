@@ -355,9 +355,9 @@ var wheelOption;               	// which wheel option
 var tireOption;					// tire size (rev 5)
 var deflectOption;				// tire deflection
 var rolloutType = 1;           	// 0=english, 1=metric
-var speedType = 0;             	// 0=mph, 1=kph
+var speedType = 1;             	// 0=mph, 1=kph - default kph
 var RPM = 90;                  	// crank speed
-var speedRangeType = 0;        	// 0=mph, 1=kph - for rpm/speed range display
+var speedRangeType = 1;        	// 0=mph, 1=kph (default) - for rpm/speed range display
 var lRPM = 80;                 	// crank speed - for rpm/speed range display
 var hRPM = 100;                 // crank speed - for rpm/speed range display
 var showgrid = "show";
