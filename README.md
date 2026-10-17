@@ -1,7 +1,10 @@
 # shift
 A javascript / HTML based bicycle gearing program
 
-The program can be run here on GitHub at:
+My version can be run at:
+https://www.365cycle.nl/shift/
+
+Mike Shermans version of the program can be run here on GitHub at:
 https://mike-sherman.github.io/shift/
 
 An older version of the program is also available at:
